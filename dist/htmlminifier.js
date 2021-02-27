@@ -10744,6 +10744,7 @@ function loadInputSourceMapFromLocalUri(uri, applyContext) {
   var isAllowed = isAllowedResource(uri, false, applyContext.inline);
   var sourceMap;
 
+  /*
   if (!fs.existsSync(uri) || !fs.statSync(uri).isFile()) {
     applyContext.warnings.push('Ignoring local source map at "' + uri + '" as resource is missing.');
     return null;
@@ -10751,8 +10752,9 @@ function loadInputSourceMapFromLocalUri(uri, applyContext) {
     applyContext.warnings.push('Cannot fetch "' + uri + '" as resource is not allowed.');
     return null;
   }
+  */
 
-  sourceMap = fs.readFileSync(uri, 'utf-8');
+  //sourceMap = fs.readFileSync(uri, 'utf-8');
   return JSON.parse(sourceMap);
 }
 
@@ -11115,6 +11117,7 @@ function loadOriginalSourceFromLocalUri(relativeUri, loadContext) {
   var isAllowed = isAllowedResource(relativeUri, false, loadContext.inline);
   var absoluteUri = path.resolve(loadContext.rebaseTo, relativeUri);
 
+  /*
   if (!fs.existsSync(absoluteUri) || !fs.statSync(absoluteUri).isFile()) {
     loadContext.warnings.push('Ignoring local source map at "' + absoluteUri + '" as resource is missing.');
     return null;
@@ -11123,7 +11126,7 @@ function loadOriginalSourceFromLocalUri(relativeUri, loadContext) {
     return null;
   }
 
-  return fs.readFileSync(absoluteUri, 'utf8');
+  return fs.readFileSync(absoluteUri, 'utf8');*/
 }
 
 module.exports = loadOriginalSources;
@@ -11521,9 +11524,9 @@ function inlineLocalStylesheet(uri, mediaQuery, metadata, inlinerContext) {
 
   if (inlinerContext.inlinedStylesheets.indexOf(absoluteUri) > -1) {
     inlinerContext.warnings.push('Ignoring local @import of "' + uri + '" as it has already been imported.');
-  } else if (!isLoaded && (!fs.existsSync(absoluteUri) || !fs.statSync(absoluteUri).isFile())) {
+  } /*else if (!isLoaded && (!fs.existsSync(absoluteUri) || !fs.statSync(absoluteUri).isFile())) {
     inlinerContext.errors.push('Ignoring local @import of "' + uri + '" as resource is missing.');
-  } else if (!isAllowed && inlinerContext.afterContent) {
+  }*/ else if (!isAllowed && inlinerContext.afterContent) {
     inlinerContext.warnings.push('Ignoring local @import of "' + uri + '" as resource is not allowed and after other content.');
   } else if (inlinerContext.afterContent) {
     inlinerContext.warnings.push('Ignoring local @import of "' + uri + '" as after other content.');
@@ -11533,7 +11536,7 @@ function inlineLocalStylesheet(uri, mediaQuery, metadata, inlinerContext) {
   } else {
     importedStyles = isLoaded ?
       inlinerContext.externalContext.sourcesContent[normalizedPath] :
-      fs.readFileSync(absoluteUri, 'utf-8');
+      ""/*fs.readFileSync(absoluteUri, 'utf-8')*/;
 
     inlinerContext.inlinedStylesheets.push(absoluteUri);
     inlinerContext.inline = inlinerContext.externalContext.options.inline;
